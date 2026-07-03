@@ -1,0 +1,40 @@
+name: Contributor Agreement Check
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+jobs:
+  contributor-agreement:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check contributor agreement acceptance
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.pull_request.body || "";
+
+            const accepted =
+              body.includes("- [x] I agree to the Contributor Agreement.") ||
+              body.includes("- [X] I agree to the Contributor Agreement.");
+
+            if (!accepted) {
+              core.setFailed(`
+              Pull request rejected.
+
+              The contributor must explicitly agree to the terms contained in
+              CONTRIBUTOR_AGREEMENT.md before this pull request can be merged.
+
+              Please check the following box in the pull request description:
+
+              - [x] I agree to the Contributor Agreement.
+              `);
+            }
+
+      - name: Agreement accepted
+        run: echo "Contributor agreement accepted."
