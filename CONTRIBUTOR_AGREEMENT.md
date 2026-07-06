@@ -1,7 +1,5 @@
 # DevDrop Contributor Agreement
 
-This Markdown version contains the same generated agreement structure
-intended for use in repository documentation and contribution workflows.
 
 ## Article 1 --- Definitions
 
