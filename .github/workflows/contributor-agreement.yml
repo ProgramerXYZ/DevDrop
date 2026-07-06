@@ -36,5 +36,45 @@ jobs:
               `);
             }
 
-      - name: Agreement accepted
-        run: echo "Contributor agreement accepted."
+      - name: Checkout archive repository
+        uses: actions/checkout@v4
+        with:
+          repository: ProgramerXYZ/DevDrop-Contribution-Archive
+          token: ${{ secrets.ARCHIVE_TOKEN }}
+          path: archive
+
+      - name: Save Pull Request patch
+        run: |
+          mkdir -p archive/${{ github.event.pull_request.user.login }}
+
+          curl \
+            -L \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3.patch" \
+            "${{ github.event.pull_request.patch_url }}" \
+            > archive/${{ github.event.pull_request.user.login }}/PR-${{ github.event.pull_request.number }}.patch
+
+      - name: Save metadata
+        run: |
+          cat <<EOF > archive/${{ github.event.pull_request.user.login }}/metadata.json
+          {
+            "user": "${{ github.event.pull_request.user.login }}",
+            "pull_request": "${{ github.event.pull_request.number }}",
+            "commit_sha": "${{ github.sha }}",
+            "accepted_agreement": true,
+            "timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          }
+          EOF
+
+      - name: Commit archive
+        run: |
+          cd archive
+
+          git config user.name "DevDrop Archive Bot"
+          git config user.email "archive-bot@devdrop.local"
+
+          git add .
+
+          git commit -m "Archive PR #${{ github.event.pull_request.number }} from ${{ github.event.pull_request.user.login }}" || echo "Nothing to commit"
+
+          git push
