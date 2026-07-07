@@ -1,41 +1,21 @@
-name: Contributor Agreement Check
+name: DevDrop Contribution Archive
 
 on:
-  pull_request_target:
+  push:
+    branches:
+      - main
+
+  pull_request:
     types:
-      - opened
-      - edited
-      - synchronize
-      - reopened
+      - closed
 
 jobs:
-  contributor-agreement:
+  archive:
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check contributor agreement acceptance
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const body = context.payload.pull_request.body || "";
-
-            const accepted =
-              body.includes("- [x] I agree to the Contributor Agreement.") ||
-              body.includes("- [X] I agree to the Contributor Agreement.");
-
-            if (!accepted) {
-              core.setFailed(`
-              Pull request rejected.
-
-              The contributor must explicitly agree to the terms contained in
-              CONTRIBUTOR_AGREEMENT.md before this pull request can be merged.
-
-              Please check the following box in the pull request description:
-
-              - [x] I agree to the Contributor Agreement.
-              `);
-            }
-
       - name: Checkout archive repository
         uses: actions/checkout@v4
         with:
@@ -43,28 +23,31 @@ jobs:
           token: ${{ secrets.ARCHIVE_TOKEN }}
           path: archive
 
-      - name: Save Pull Request patch
-        run: |
-          mkdir -p archive/${{ github.event.pull_request.user.login }}
-
-          curl \
-            -L \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3.patch" \
-            "${{ github.event.pull_request.patch_url }}" \
-            > archive/${{ github.event.pull_request.user.login }}/PR-${{ github.event.pull_request.number }}.patch
-
       - name: Save metadata
         run: |
-          cat <<EOF > archive/${{ github.event.pull_request.user.login }}/metadata.json
+          mkdir -p archive/$(date +%Y-%m-%d_%H-%M-%S)
+
+          cat <<EOF > archive/$(date +%Y-%m-%d_%H-%M-%S)/metadata.json
           {
-            "user": "${{ github.event.pull_request.user.login }}",
-            "pull_request": "${{ github.event.pull_request.number }}",
-            "commit_sha": "${{ github.sha }}",
-            "accepted_agreement": true,
+            "repository": "${{ github.repository }}",
+            "branch": "${{ github.ref_name }}",
+            "actor": "${{ github.actor }}",
+            "event": "${{ github.event_name }}",
+            "commit": "${{ github.sha }}",
             "timestamp": "$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           }
           EOF
+
+      - name: Save patch
+        if: github.event_name == 'pull_request'
+        run: |
+          mkdir -p archive/pr-${{ github.event.pull_request.number }}
+
+          curl -L \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3.patch" \
+            "${{ github.event.pull_request.patch_url }}" \
+            > archive/pr-${{ github.event.pull_request.number }}/changes.patch
 
       - name: Commit archive
         run: |
@@ -75,6 +58,6 @@ jobs:
 
           git add .
 
-          git commit -m "Archive PR #${{ github.event.pull_request.number }} from ${{ github.event.pull_request.user.login }}" || echo "Nothing to commit"
+          git commit -m "Archive ${{ github.event_name }} by ${{ github.actor }}" || echo "Nothing to commit"
 
           git push
