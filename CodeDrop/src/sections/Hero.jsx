@@ -6,7 +6,7 @@ function Hero() {
      
       {/* contianer */}
 
-      <div className="container px-6 pt-32 pb-20 relative w-full mx-auto h-full grid lg:grid-cols-2 gap-2 md:gap-4">
+      <div className="container px-6 md:px-2 pt-32 pb-20 relative w-full mx-auto h-full grid lg:grid-cols-2 gap-2 md:gap-4">
 
         {/* content */}
         <div className="p-3 md:p-0">
