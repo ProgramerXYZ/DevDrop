@@ -1,0 +1,130 @@
+:root {
+  /* ==========================
+      BRAND COLORS
+  ========================== */
+
+  --primary: #5B3DF5;
+  --primary-hover: #6E4FFF;
+  --primary-dark: #4A2FE3;
+  --primary-light: #A78BFA;
+
+  /* ==========================
+      HERO BACKGROUND
+  ========================== */
+
+  --hero-bg: #09090F;
+  --hero-bg-2: #0D0A1E;
+  --hero-bg-3: #16122D;
+  --hero-purple-glow: #4F2DFF;
+  --hero-blue-glow: #312E81;
+
+  /* ==========================
+      PAGE BACKGROUND
+  ========================== */
+
+  --background: #FFFFFF;
+  --surface: #FAFAFC;
+  --surface-2: #F5F5F7;
+
+  /* ==========================
+      CARD COLORS
+  ========================== */
+
+  --card: #FFFFFF;
+  --card-hover: #FAFAFA;
+  --card-border: #E5E7EB;
+
+  /* ==========================
+      TEXT
+  ========================== */
+
+  --text: #111827;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+  --text-light: #9CA3AF;
+  --text-white: #FFFFFF;
+
+  /* ==========================
+      BORDER
+  ========================== */
+
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+
+  /* ==========================
+      INPUT
+  ========================== */
+
+  --input-bg: #FFFFFF;
+  --input-border: #D1D5DB;
+  --input-focus: #5B3DF5;
+
+  /* ==========================
+      BUTTON
+  ========================== */
+
+  --button-primary: #5B3DF5;
+  --button-primary-hover: #4A2FE3;
+
+  --button-secondary: #FFFFFF;
+  --button-secondary-hover: #F3F4F6;
+
+  /* ==========================
+      ICON COLORS
+  ========================== */
+
+  --code: #6D5BFF;
+  --terminal: #22C55E;
+  --file: #F59E0B;
+  --image: #3B82F6;
+  --link: #EC4899;
+
+  /* ==========================
+      STATUS
+  ========================== */
+
+  --success: #22C55E;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --info: #3B82F6;
+
+  /* ==========================
+      SHADOW
+  ========================== */
+
+  --shadow-sm: 0 2px 6px rgba(0,0,0,.05);
+  --shadow-md: 0 8px 24px rgba(0,0,0,.08);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,.12);
+
+  /* ==========================
+      RADIUS
+  ========================== */
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  /* ==========================
+      TRANSITIONS
+  ========================== */
+  --transition: .25s ease;
+
+  background:
+radial-gradient(circle at 75% 80%, rgba(91,61,245,.35), transparent 45%),
+radial-gradient(circle at 90% 20%, rgba(59,130,246,.08), transparent 30%),
+linear-gradient(135deg,#09090F,#0D0A1E,#16122D);
+
+}
+body{
+ background: var(--background);
+ font-family: "Inter", sans-serif;
+ border: 1px solid var(--border);
+}
+.card{
+ background: var(--card);
+border: 1px solid var(--border);
+border-radius: var(--radius-lg);
+box-shadow: var(--shadow-sm);
+}
