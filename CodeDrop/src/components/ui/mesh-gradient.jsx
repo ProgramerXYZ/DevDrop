@@ -17,7 +17,6 @@ export function MeshGradientBackground({
       className={cn("fixed inset-0 overflow-hidden", className)}
       style={{ backgroundColor }}>
       
-      {/* طبقة ستايل عادية متوافقة تماماً مع معالج Vite بدون مكاتب خارجية */}
       <style>{`
         @keyframes meshMove1 {
           0%, 100% { transform: translate(0%, 0%) scale(1); }
@@ -42,7 +41,7 @@ export function MeshGradientBackground({
         }
       `}</style>
 
-      {/* كرات الألوان التفاعلية الحركية */}
+
       <div className="absolute inset-0">
         {/* Orb 1 */}
         <div
@@ -89,14 +88,13 @@ export function MeshGradientBackground({
           }} />
       </div>
 
-      {/* نسيج سينمائي خفيف لإعطاء مظهر جمالي */}
+
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
         }} />
 
-      {/* طبقة المحتوى الداخلي الفعلي للمشروع */}
       {children && <div className="relative z-10 h-full w-full">{children}</div>}
     </div>
   );
