@@ -1,12 +1,14 @@
 import React from 'react'
+import Navbar from '../layout/Navbar'
 
 function Hero() {
   return (
-    <section className="relative min-h-screen py-32 mx-auto flex items-center overflow-hidden">
-     
+    <section className="relative min-h-screen py-8 mx-auto flex items-center">
+       <Navbar/>
       {/* contianer */}
 
-      <div className="container px-6 md:px-2 pt-32 pb-20 relative w-full mx-auto h-full grid lg:grid-cols-2 gap-2 md:gap-4">
+    <div className="container px-6 md:px-2 pt-32 pb-20 relative w-full mx-auto
+     h-full grid lg:grid-cols-2 gap-2 md:gap-4">
 
         {/* content */}
         <div className="p-3 md:p-0">
@@ -15,6 +17,7 @@ function Hero() {
             <span className="text-primary">code</span>base,<br/> 
             just a single drop away.
             </h1>
+            
           <p className="text-lg text-secondary-foreground py-2 fade-in-animation animation-delay-200">
             Forget traditional posts. In CodeDrop, your source files are shared as
              structured Drops. Share modular functions, discover production-ready logic,
