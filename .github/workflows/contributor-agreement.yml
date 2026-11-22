@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - main
-
+  
   pull_request:
     types:
       - closed
+      
+concurrency:
+  group: devdrop-contribution-archive
+  cancel-in-progress: false
 
 jobs:
   archive:
@@ -25,9 +29,9 @@ jobs:
 
       - name: Save metadata
         run: |
-          mkdir -p archive/$(date +%Y-%m-%d_%H-%M-%S)
+          mkdir -p archive/$(date -u +%Y-%m-%d_%H-%M-%S)-${{ github.run_id }}-${{ github.run_attempt }}
 
-          cat <<EOF > archive/$(date +%Y-%m-%d_%H-%M-%S)/metadata.json
+          cat <<EOF > archive/$(date -u +%Y-%m-%d_%H-%M-%S)-${{ github.run_id }}-${{ github.run_attempt }}/metadata.json
           {
             "repository": "${{ github.repository }}",
             "branch": "${{ github.ref_name }}",
@@ -52,12 +56,11 @@ jobs:
       - name: Commit archive
         run: |
           cd archive
-
           git config user.name "DevDrop Archive Bot"
           git config user.email "archive-bot@devdrop.local"
 
           git add .
 
-          git commit -m "Archive ${{ github.event_name }} by ${{ github.actor }}" || echo "Nothing to commit"
+          git commit -m "Archive ${{ github.event_name }} by ${{ github.actor }}" || exit 0
 
-          git push
+          git push origin main
